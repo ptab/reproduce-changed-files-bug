@@ -1,0 +1,25 @@
+---
+name: Get list of changed files
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  job:
+    name: List changed files in tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: tj-actions/changed-files@v44
+        id: changed-files
+
+      - run: |-
+          echo "List all the files that have changed: $ALL_CHANGED_FILES"
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
